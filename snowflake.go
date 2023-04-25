@@ -25,12 +25,13 @@ var (
 	StepBits uint8 = 12
 
 	// DEPRECATED: the below four variables will be removed in a future release.
-	mu        sync.Mutex
-	nodeMax   int64 = -1 ^ (-1 << NodeBits)
-	nodeMask        = nodeMax << StepBits
-	stepMask  int64 = -1 ^ (-1 << StepBits)
-	timeShift       = NodeBits + StepBits
-	nodeShift       = StepBits
+	mu          sync.Mutex
+	nodeMax     int64 = -1 ^ (-1 << NodeBits)
+	nodeMask          = nodeMax << StepBits
+	stepMask    int64 = -1 ^ (-1 << StepBits)
+	timeShift         = NodeBits + StepBits
+	nodeShift         = StepBits
+	defaultNode *Node
 )
 
 const encodeBase32Map = "ybndrfg8ejkmcpqxot1uwisza345h769"
@@ -73,6 +74,8 @@ func init() {
 	for i := 0; i < len(encodeBase32Map); i++ {
 		decodeBase32Map[encodeBase32Map[i]] = byte(i)
 	}
+
+	defaultNode, _ = NewNode(0)
 }
 
 // A Node struct holds the basic information needed for a snowflake generator
@@ -365,4 +368,8 @@ func (f *ID) UnmarshalJSON(b []byte) error {
 
 	*f = ID(i)
 	return nil
+}
+
+func Generate() ID {
+	return defaultNode.Generate()
 }

@@ -578,3 +578,10 @@ func TestParseBase58(t *testing.T) {
 		})
 	}
 }
+
+func TestGenerate(t *testing.T) {
+	id := Generate()
+	if id == -1 {
+		t.Errorf("fail to generate")
+	}
+}
